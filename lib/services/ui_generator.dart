@@ -1,0 +1,364 @@
+import 'package:bisan_systems_erp/constants/constants.dart' as constants;
+import 'package:bisan_systems_erp/constants/fields.dart' as bsn_fields;
+import 'package:bisan_systems_erp/utils/configs.dart';
+import 'package:bisan_systems_erp/utils/utils.dart';
+import 'package:bisan_systems_erp/view_models/bsn_field.dart';
+import 'package:bisan_systems_erp/view_models/bsn_tab.dart';
+import 'package:bisan_systems_erp/view_models/bsn_widget.dart';
+import 'package:bisan_systems_erp/view_models/entity.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/containers/bsn_container.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/containers/bsn_split_pane.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_button.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_chart.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_checkbox.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_color.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_date.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_dropdown.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_email.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_file.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_html_editor.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_html_viewer.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_image.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_image_pane.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_numeric.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_radio.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_range.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_table.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_tags.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_tel.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_text.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_textarea.dart';
+import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_url.dart';
+import 'package:bisan_systems_erp/widgets/bsn_toolbar.dart';
+import 'package:flutter/material.dart';
+import 'package:reflectable/reflectable.dart';
+
+class UiGenerator {
+  dynamic childAttribute = {
+    'container': 'child',
+    'frame': 'child',
+  };
+
+  /// @param data
+  /// @param viewContainerRef
+  /// @param actionContent
+  /// @param values
+  /// @param parentComponent
+  BsnTab buildFrame(
+      {required dynamic actionContent,
+      required String recordType}) {
+    dynamic gui = actionContent[constants.gui.toUpperCase()];
+    dynamic values = actionContent[constants.values];
+    BsnTab newTab = BsnTab(tabDetails: gui);
+    newTab.isListing = gui[constants.frameType] == constants.listing;
+    if (!isGuiExists(gui[constants.recordType])) {
+      setGui(
+          guiName:
+              gui[newTab.isListing ? bsn_fields.name : constants.recordType],
+          gui: gui);
+    }
+    newTab.setEntity(Entity());
+    newTab.entity.setField(
+        fieldName: constants.recordType, value: recordType, isInitial: true);
+    newTab.entity.setField(
+        fieldName: constants.title,
+        value: gui[constants.frameType] == constants.listing
+            ? gui[bsn_fields.label]
+            : (values['nameAR'] ?? 'new'),
+        isInitial: true);
+    newTab.entity.setField(
+        fieldName: 'isListing',
+        value: gui[constants.frameType] == constants.listing,
+        isInitial: true);
+    newTab.entity.frame = newTab;
+    newTab.tableName = recordType;
+    _buildWidgetValues(frame: newTab, gui: gui, values: values);
+    newTab.children = _buildChildrenGUI(
+        frame: newTab,
+        children: gui['children'],
+        values: values ?? {});
+    newTab.initializeWidget();
+    newTab.initializeTitleWidget(newTab);
+
+    return newTab;
+  }
+
+  List<Widget> _buildChildrenGUI(
+      {
+      required BsnTab frame,
+      required List<dynamic> children,
+      required Map values}) {
+    List<Widget> widgets = [];
+    for (var child in children) {
+      Widget widget;
+      if (child['type'] == 'toolbar') {
+        widget = BsnToolbarWidget(frame: frame, actionDetails: child);
+      } else {
+        widget = _buildWidget(
+            frame: frame,
+            widgetDetails: child,
+            recordType: frame.entity.getField(fieldName: constants.recordType),
+            isListing: frame.entity.getField(fieldName: 'isListing'),
+            values: values);
+      }
+      if (child['type'] != 'toolbar') {
+        widget = Flexible(flex: 1, child: widget);
+
+      }
+      widgets.add(widget);
+    }
+    return widgets;
+  }
+
+  _buildWidget(
+      {
+      required dynamic widgetDetails,
+      required bool isListing,
+      required String recordType,
+      required BsnTab frame,
+      required Map values}) {
+    BsnWidget instance = _prepareInstance(widgetDetails: widgetDetails, frame: frame, values: values);
+    // instance.enableLogic();
+    Widget widget;
+    switch (widgetDetails['type']) {
+      default:
+        widget = Center(
+            child: Text('component not defined yet ${widgetDetails['type']}'));
+        break;
+    }
+    if (isInput(widgetDetails)) {
+      (instance as BsnField).controller =
+          TextEditingController(text: values[widgetDetails['name']]);
+      instance.value = values[widgetDetails['name']] ?? '';
+      frame.addControl(
+          name: widgetDetails['name'], controller: instance.controller);
+    }
+
+    return widgetDetails['type'] == 'container'
+        ? widget
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: widget);
+  }
+
+  List<Tab> _buildInnerTabs(widgetDetails) {
+    List<Tab> tabBarItems = [];
+    for (var element in widgetDetails['children']) {
+      tabBarItems.add(Tab(child: Text(element[bsn_fields.label])));
+    }
+    return tabBarItems;
+  }
+
+  List<Widget> _buildInnerTabsContent(
+      {required BuildContext context,
+      required BsnTab frame,
+      required Map values,
+      required dynamic widgetDetails}) {
+    List<Widget> tabBarItems = _buildChildrenGUI(
+        children: widgetDetails['children'],
+        frame: frame,
+        values: values);
+    return tabBarItems;
+  }
+
+  void _buildWidgetValues(
+      {required BsnTab frame, required dynamic gui, required dynamic values}) {
+    if (frame.isListing) {
+      return;
+    }
+
+    if (isInput(gui) && gui['name'] != null) {
+      if (gui['name'] != null) {
+        frame.entity.setField(
+            fieldName: gui['name'],
+            value: values[gui['name']],
+            isInitial: true);
+      }
+    } else {
+      if (gui['children'] != null && gui['children'].length > 0) {
+        gui['children'].forEach((child) {
+          _buildWidgetValues(frame: frame, values: values, gui: child);
+        });
+      }
+    }
+  }
+
+  bool isInput(gui) {
+    List inputs = [
+      'date',
+      'text',
+      'email',
+      'number',
+      'textArea',
+      'telephone',
+      'select',
+      'checkBox',
+      'radio',
+      'image',
+      'range',
+      'tags',
+      'url',
+    ];
+    return inputs.contains(gui['type']);
+  }
+
+  BsnWidget _getInstance({required dynamic widgetDetails}) {
+    String type = widgetDetails['type'];
+    switch (type) {
+      case 'container':
+        return BsnContainer();
+      case "table":
+        return BsnTable();
+      // case "tab":
+      //   return BsnTab();
+      case "split-pane":
+        return BsnSplitPane();
+      case "chart":
+        return BsnChart();
+      case "html-viewer":
+        return BsnHtmlViewer();
+      case "htmlEditor":
+        return BsnHtmlEditor();
+      case "image-panel":
+        return BsnImagePane();
+      case 'button':
+        return BsnButton();
+      case 'date':
+        return BsnDate();
+      case 'text':
+        return BsnText();
+      case 'email':
+        return BsnEmail();
+      case 'number':
+        return BsnNumeric();
+      case 'textArea':
+        return BsnTextArea();
+      case "telephone":
+        return BsnTel();
+      case "select":
+        return BsnDropDown();
+      case "checkBox":
+        return BsnCheckBox();
+      case "radio":
+        return BsnRadio();
+      case "image":
+        return BsnImage();
+      case "color":
+        return BsnColor();
+      case "file":
+        return BsnFile();
+      case "range":
+        return BsnRange();
+      case "tags":
+        return BsnTags();
+      case "url":
+        return BsnUrl();
+      default:
+        return BsnWidget();
+    }
+  }
+
+  BsnWidget _prepareInstance(
+      {required dynamic widgetDetails,
+      required BsnTab frame,
+      required Map values}) {
+    BsnWidget instance = _getInstance(widgetDetails: widgetDetails);
+    instance.parent = frame;
+    frame.entity.setField(
+        fieldName: '_ENTITY_ID', value: values['_ENTITY_ID'], isInitial: true);
+    frame.entity
+        .setField(fieldName: 'code', value: values['code'], isInitial: true);
+    if (instance.fields.isNotEmpty) {
+      for (var field in instance.fields) {
+        if (field == bsn_fields.enabled || field == bsn_fields.visible) {
+          // _updateTriggers(
+          //     widgetDetails: widgetDetails,
+          //     frame: frame,
+          //     field: field,
+          //     instance: instance);
+        } else {
+          frame.entity
+              .setField(fieldName: 'name', value: field, isInitial: true);
+
+          if (field == bsn_fields.layout && widgetDetails[field] == null) {
+            widgetDetails[field] = "column";
+          }
+          if (field == bsn_fields.bsnClass && widgetDetails[field] == null) {
+            widgetDetails[field] = " ";
+          }
+
+          String fieldName = field == bsn_fields.bsnClass ? 'className' : field;
+          if (reflectable.canReflect(instance)) {
+            InstanceMirror instanceMirror = reflectable.reflect(instance);
+
+            if (widgetDetails[fieldName] != null) {
+              dynamic value = widgetDetails[fieldName];
+              instanceMirror.invokeSetter(fieldName, value);
+            }
+          }
+          if (widgetDetails['type'] == 'checkbox') {
+            Utils.toBooleanLogic(values[widgetDetails[bsn_fields.name]]);
+          }
+
+          if (values.isNotEmpty &&
+              widgetDetails[bsn_fields.name] != null &&
+              frame.entity
+                      .getField(fieldName: widgetDetails[bsn_fields.name]) !=
+                  values[widgetDetails[bsn_fields.name]]) {
+            frame.entity.setField(
+                fieldName: widgetDetails[bsn_fields.name],
+                value: values[widgetDetails[bsn_fields.name]],
+                isInitial: true);
+          }
+        }
+      }
+    }
+    return instance;
+  }
+
+  _updateTriggers(
+      {required BsnTab frame,
+      required BsnWidget instance,
+      required Map widgetDetails,
+      required String field}) {
+    if (widgetDetails[field] != null) {
+      // build enable & visible Logic
+      List<String> parts = widgetDetails[field].split("\u0001");
+      String body = parts.removeAt(0);
+      if (reflectable.canReflect(instance)) {
+        InstanceMirror instanceMirror = reflectable.reflect(instance);
+
+        String field = 'enableLogic';
+        if (field == bsn_fields.visible) {
+          field = 'visibleLogic';
+        }
+        instanceMirror.invokeSetter(field, body.toString());
+      }
+      var params = parts;
+      for (String param in params) {
+        if (param.contains("#")) {
+          continue;
+        }
+
+        if (field == bsn_fields.visible) {
+          if (frame.visibleTrigger[param]) {
+            frame.visibleTrigger[param].push(instance);
+          } else {
+            frame.visibleTrigger[param] = [instance];
+          }
+        } else {
+          if (frame.enabledTrigger[param]) {
+            frame.enabledTrigger[param].push(instance);
+          } else {
+            frame.enabledTrigger[param] = [instance];
+          }
+        }
+      }
+    } else {
+      if (reflectable.canReflect(instance)) {
+        InstanceMirror instanceMirror = reflectable.reflect(instance);
+        instanceMirror.invokeSetter(field, widgetDetails[field]);
+      }
+    }
+  }
+}
