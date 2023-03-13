@@ -13,36 +13,18 @@ class BsnToolbarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final children = <Widget>[];
-
-    for (var child in actionDetails['children']) {
-      var action = BsnActionToolbar.fromJson(child);
-      children
-          .add(_buildToolbarIconButton(action, frame, action.name, context));
-    }
-
+    print('here');
     return AppBar(
       backgroundColor: BsnTheme.secondaryColor,
       elevation: 2,
       automaticallyImplyLeading: false,
-      title: Row(
-        children: children,
-
-        // [
-        //   _buildToolbarIconButton(Icons.folder),
-        //   _buildToolbarIconButton(Icons.save),
-        //   _buildToolbarIconButton(Icons.edit),
-        //   _buildToolbarIconButton(Icons.list),
-        //   _buildToolbarIconButton(Icons.delete)
-        // ],
-      ),
+      title: Row(children: getChildren()),
     );
   }
 
-  Widget _buildToolbarIconButton(
-      BsnActionToolbar action, frame, name, context) {
+  Widget _buildToolbarIconButton(BsnActionToolbar action, frame, name) {
     return GestureDetector(
-      onTap: () => action._getAction(frame, name, context),
+      onTap: () => action._getAction(frame, name),
       child: Padding(
         padding: const EdgeInsets.all(2),
         child: Tooltip(
@@ -52,6 +34,16 @@ class BsnToolbarWidget extends StatelessWidget {
       ),
       // Icon(icon, color: BsnTheme.primaryColor),
     );
+  }
+
+  List<Widget> getChildren() {
+    final List<Widget> children = [];
+
+    for (var child in actionDetails['children']) {
+      var action = BsnActionToolbar.fromJson(child);
+      children.add(_buildToolbarIconButton(action, frame, action.name));
+    }
+    return children;
   }
 }
 
@@ -83,7 +75,7 @@ class BsnActionToolbar {
     return data;
   }
 
-  _getAction(frame, name, context) async {
+  _getAction(frame, name) async {
     String? code;
     if (frame.selectedCodes.isNotEmpty) {
       for (String code in frame.selectedCodes) {
@@ -91,16 +83,14 @@ class BsnActionToolbar {
             code: code,
             tempCode: configs.getTempCode(),
             action: name,
-            name: name,
-            context: context);
+            name: name);
       }
     } else {
       frame.actionToRecord(
           code: code,
           tempCode: configs.getTempCode(),
           action: name,
-          name: name,
-          context: context);
+          name: name);
     }
   }
 

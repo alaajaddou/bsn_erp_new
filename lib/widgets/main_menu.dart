@@ -111,28 +111,4 @@ class _MainMenuState extends State<MainMenu> {
     }
     return itemTiles;
   }
-
-  // Future<void> getListingData(BsnMenuItem item) async {
-  //   // check if the GUI is stored, and store it if not exist.
-  //   dynamic actionContent = {};
-  //   String listingName = _getListingName(item.link);
-  //   if (configs.guiMap[listingName] == null) {
-  //     Response<dynamic> response = await Api.listing(item.link);
-  //     configs.setGui(
-  //         guiName: json.decode(response.data)['GUI']['name'],
-  //         gui: json.decode(response.data)['GUI']);
-  //     actionContent = json.decode(response.data);
-  //   } else {
-  //     actionContent['GUI'] = configs.getGui(guiName: listingName);
-  //   }
-  //   BsnTab newTab = UiGenerator().buildFrame(
-  //       actionContent: actionContent, recordType: item.name, context: context);
-  //   newTab.isDataListNeeded = true;
-  //   tabSubject.add({'tab': newTab, 'action': 'add'});
-  // }
-
-  String _getListingName(String link) {
-    List<String> guiLinkSplit = link.split('/');
-    return "${guiLinkSplit[1]}_${guiLinkSplit[0]}";
-  }
 }

@@ -22,6 +22,7 @@ class BsnTab extends BsnWidget {
   late String title;
   late Widget titleWidget;
   bool isListing = false;
+  bool isHorizontal = false;
   Map tabDetails;
   bool closable = false;
   List<String> selectedCodes = [];
@@ -119,8 +120,7 @@ class BsnTab extends BsnWidget {
     }
     responseMap['GUI'] = responseGUI;
     BsnTab newTab = UiGenerator().buildFrame(
-        actionContent: responseMap,
-        recordType: responseGUI[recordType]);
+        actionContent: responseMap, recordType: responseGUI[recordType]);
     tabSubject.add({'tab': newTab, 'action': 'add'});
   }
 

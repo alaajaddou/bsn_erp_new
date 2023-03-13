@@ -45,8 +45,7 @@ class UiGenerator {
   /// @param values
   /// @param parentComponent
   BsnTab buildFrame(
-      {required dynamic actionContent,
-      required String recordType}) {
+      {required dynamic actionContent, required String recordType}) {
     dynamic gui = actionContent[constants.gui.toUpperCase()];
     dynamic values = actionContent[constants.values];
     BsnTab newTab = BsnTab(tabDetails: gui);
@@ -73,72 +72,40 @@ class UiGenerator {
     newTab.entity.frame = newTab;
     newTab.tableName = recordType;
     _buildWidgetValues(frame: newTab, gui: gui, values: values);
-    newTab.children = _buildChildrenGUI(
-        frame: newTab,
-        children: gui['children'],
-        values: values ?? {});
+    newTab.children = buildChildrenGUI(
+        frame: newTab, children: gui['children'], values: values ?? {});
     newTab.initializeWidget();
     newTab.initializeTitleWidget(newTab);
 
     return newTab;
   }
 
-  List<Widget> _buildChildrenGUI(
-      {
-      required BsnTab frame,
+  List<Widget> buildChildrenGUI(
+      {required BsnTab frame,
       required List<dynamic> children,
       required Map values}) {
     List<Widget> widgets = [];
     for (var child in children) {
-      Widget widget;
-      if (child['type'] == 'toolbar') {
-        widget = BsnToolbarWidget(frame: frame, actionDetails: child);
-      } else {
-        widget = _buildWidget(
-            frame: frame,
-            widgetDetails: child,
-            recordType: frame.entity.getField(fieldName: constants.recordType),
-            isListing: frame.entity.getField(fieldName: 'isListing'),
-            values: values);
-      }
-      if (child['type'] != 'toolbar') {
-        widget = Flexible(flex: 1, child: widget);
-
-      }
-      widgets.add(widget);
+      widgets.add(buildWidget(frame: frame, widgetDetails: child));
     }
     return widgets;
   }
 
-  _buildWidget(
-      {
-      required dynamic widgetDetails,
-      required bool isListing,
-      required String recordType,
-      required BsnTab frame,
-      required Map values}) {
-    BsnWidget instance = _prepareInstance(widgetDetails: widgetDetails, frame: frame, values: values);
+  buildWidget({required dynamic widgetDetails, required BsnTab frame}) {
+    BsnWidget instance =
+        _prepareInstance(widgetDetails: widgetDetails, frame: frame);
     // instance.enableLogic();
-    Widget widget;
-    switch (widgetDetails['type']) {
-      default:
-        widget = Center(
-            child: Text('component not defined yet ${widgetDetails['type']}'));
-        break;
-    }
+    Widget widget = getWidget(frame: frame, widgetDetails: widgetDetails);
     if (isInput(widgetDetails)) {
-      (instance as BsnField).controller =
-          TextEditingController(text: values[widgetDetails['name']]);
-      instance.value = values[widgetDetails['name']] ?? '';
+      String value =
+          instance.getRoot().getEntity().getField(widgetDetails['name']);
+      (instance as BsnField).controller = TextEditingController(text: value);
+      instance.value = value;
       frame.addControl(
           name: widgetDetails['name'], controller: instance.controller);
     }
 
-    return widgetDetails['type'] == 'container'
-        ? widget
-        : Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: widget);
+    return widget;
   }
 
   List<Tab> _buildInnerTabs(widgetDetails) {
@@ -154,10 +121,8 @@ class UiGenerator {
       required BsnTab frame,
       required Map values,
       required dynamic widgetDetails}) {
-    List<Widget> tabBarItems = _buildChildrenGUI(
-        children: widgetDetails['children'],
-        frame: frame,
-        values: values);
+    List<Widget> tabBarItems = buildChildrenGUI(
+        children: widgetDetails['children'], frame: frame, values: values);
     return tabBarItems;
   }
 
@@ -259,15 +224,17 @@ class UiGenerator {
   }
 
   BsnWidget _prepareInstance(
-      {required dynamic widgetDetails,
-      required BsnTab frame,
-      required Map values}) {
+      {required dynamic widgetDetails, required BsnTab frame}) {
     BsnWidget instance = _getInstance(widgetDetails: widgetDetails);
     instance.parent = frame;
     frame.entity.setField(
-        fieldName: '_ENTITY_ID', value: values['_ENTITY_ID'], isInitial: true);
-    frame.entity
-        .setField(fieldName: 'code', value: values['code'], isInitial: true);
+        fieldName: '_ENTITY_ID',
+        value: frame.entity.getField(fieldName: '_ENTITY_ID'),
+        isInitial: true);
+    frame.entity.setField(
+        fieldName: 'code',
+        value: frame.entity.getField(fieldName: 'code'),
+        isInitial: true);
     if (instance.fields.isNotEmpty) {
       for (var field in instance.fields) {
         if (field == bsn_fields.enabled || field == bsn_fields.visible) {
@@ -296,18 +263,19 @@ class UiGenerator {
               instanceMirror.invokeSetter(fieldName, value);
             }
           }
-          if (widgetDetails['type'] == 'checkbox') {
-            Utils.toBooleanLogic(values[widgetDetails[bsn_fields.name]]);
-          }
 
-          if (values.isNotEmpty &&
-              widgetDetails[bsn_fields.name] != null &&
-              frame.entity
-                      .getField(fieldName: widgetDetails[bsn_fields.name]) !=
-                  values[widgetDetails[bsn_fields.name]]) {
+          if (widgetDetails[bsn_fields.name] != null) {
+            if (widgetDetails['type'] == 'checkbox') {
+              Utils.toBooleanLogic(frame.entity
+                  .getField(fieldName: widgetDetails[bsn_fields.name]));
+            }
+
+            String value = frame.entity
+                    .getField(fieldName: widgetDetails[bsn_fields.name]) ??
+                ' ';
             frame.entity.setField(
                 fieldName: widgetDetails[bsn_fields.name],
-                value: values[widgetDetails[bsn_fields.name]],
+                value: value,
                 isInitial: true);
           }
         }
@@ -360,5 +328,20 @@ class UiGenerator {
         instanceMirror.invokeSetter(field, widgetDetails[field]);
       }
     }
+  }
+
+  Widget getWidget({frame, widgetDetails}) {
+    Widget widget;
+    switch (widgetDetails['type']) {
+      case 'toolbar':
+        widget = BsnToolbarWidget(frame: frame, actionDetails: widgetDetails);
+        break;
+      default:
+        widget = Center(
+            child: Text('component not defined yet ${widgetDetails['type']}'));
+        break;
+    }
+
+    return widget;
   }
 }

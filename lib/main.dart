@@ -3,6 +3,8 @@ import 'package:bisan_systems_erp/services/route_generator.dart';
 import 'package:bisan_systems_erp/themes/bsn_theme.dart';
 import 'package:flutter/material.dart';
 
+BuildContext? currentContext;
+
 void main() {
   initializeReflectable();
   runApp(const MyApp());

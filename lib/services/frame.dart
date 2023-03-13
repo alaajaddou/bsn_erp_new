@@ -1,20 +1,21 @@
+import 'package:bisan_systems_erp/constants/constants.dart' as constants;
+import 'package:bisan_systems_erp/constants/fields.dart' as bsn_fields;
 import 'package:bisan_systems_erp/utils/configs.dart';
 import 'package:bisan_systems_erp/view_models/bsn_menu_item.dart';
 import 'package:bisan_systems_erp/view_models/bsn_tab.dart';
 import 'package:bisan_systems_erp/view_models/entity.dart';
 import 'package:bisan_systems_erp/widgets/bsn_tab.dart';
-import 'package:bisan_systems_erp/constants/constants.dart' as constants;
-import 'package:bisan_systems_erp/constants/fields.dart' as bsn_fields;
 
 class FrameService {
   List<dynamic> frames = [];
+
   openFrame(BsnMenuItem element) {
     tabSubject.add({'tab': element, 'action': 'add'});
   }
 
-  createFrame(actionContent) {
-    print(actionContent);
-    String recordType = actionContent[constants.recordType];
+  BsnTab createFrameObject(actionContent) {
+    String recordType =
+        actionContent[constants.gui.toUpperCase()][constants.recordType];
     dynamic gui = actionContent[constants.gui.toUpperCase()];
     dynamic values = actionContent[constants.values];
     BsnTab newTab = BsnTab(tabDetails: gui);
@@ -22,7 +23,7 @@ class FrameService {
     if (!isGuiExists(gui[constants.recordType])) {
       setGui(
           guiName:
-          gui[newTab.isListing ? bsn_fields.name : constants.recordType],
+              gui[newTab.isListing ? bsn_fields.name : constants.recordType],
           gui: gui);
     }
     newTab.setEntity(Entity());
@@ -41,10 +42,6 @@ class FrameService {
     newTab.entity.frame = newTab;
     newTab.tableName = recordType;
     _buildWidgetValues(frame: newTab, gui: gui, values: values);
-
-    print('=========');
-    print(newTab);
-    print('=========');
     return newTab;
   }
 

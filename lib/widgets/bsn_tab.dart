@@ -1,6 +1,8 @@
 import 'package:bisan_systems_erp/services/frame.dart';
 import 'package:bisan_systems_erp/view_models/bsn_menu_item.dart';
 import 'package:bisan_systems_erp/view_models/bsn_tab.dart';
+import 'package:bisan_systems_erp/widgets/frame.dart';
+import 'package:bisan_systems_erp/widgets/tab_title.dart';
 import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -37,8 +39,9 @@ class _BsnTabWidgetState extends State<BsnTabWidget>
       BsnMenuItem newTab = event['tab'];
 
       if (event['action'] == 'add') {
-        print(newTab.toJson());
-        FrameService().createFrame(newTab);
+        tabList.add(TabTitleWidget(label: newTab.label, tabIndex: tabList.length));
+        tabViewList.add(FrameWidget(itemDetails: newTab));
+        // FrameService().createFrame(newTab);
         // openedTabs.add(selectedTab);
         // tabList.add(event['tab'].titleWidget);
         // tabViewList.add(event['tab'].widget);
