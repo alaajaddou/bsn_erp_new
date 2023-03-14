@@ -137,8 +137,10 @@ class _BsnTableWidgetState extends State<BsnTableWidget> {
           setState(() {
             if (doubleTapChecker.isDoubleTap(element)) {
               widget.frame.selectedCodes.add(this.rows[i]['code']);
+              print(this.rows[i]['name']);
               widget.selectedRows[i] = true;
               widget.frame.actionToRecord(
+                title: this.rows[i]['name'],
                   name: widget.name,
                   code: this.rows[i]['code'],
                   tempCode: configs.getTempCode(),

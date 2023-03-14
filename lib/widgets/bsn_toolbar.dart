@@ -83,6 +83,7 @@ class BsnActionToolbar {
             code: code,
             tempCode: configs.getTempCode(),
             action: name,
+            title: name,
             name: name);
       }
     } else {
@@ -90,6 +91,7 @@ class BsnActionToolbar {
           code: code,
           tempCode: configs.getTempCode(),
           action: name,
+          title: name,
           name: name);
     }
   }

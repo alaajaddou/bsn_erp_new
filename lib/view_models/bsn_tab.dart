@@ -37,6 +37,7 @@ class BsnTab extends BsnWidget {
 
   BsnTab({required this.tabDetails});
 
+  @override
   getRoot() {
     return this;
   }
@@ -47,6 +48,7 @@ class BsnTab extends BsnWidget {
     this.entity = entity;
   }
 
+  @override
   getEntity() {
     return entity;
   }
@@ -98,6 +100,7 @@ class BsnTab extends BsnWidget {
 
   Future<void> actionToRecord(
       {String? code,
+      required String title,
       required String name,
       String? tempCode,
       required String action}) async {
@@ -108,20 +111,9 @@ class BsnTab extends BsnWidget {
       code,
       getTempCode(),
       entity,
+        title
     );
-    Response<dynamic> response = await Api.callAction(bsnAction);
-    Map responseMap = Map.from(json.decode(response.data));
-    String tempRecordType = entity.getField(fieldName: recordType);
-    var responseGUI = responseMap['GUI'];
-    if (responseGUI is String && responseGUI.isEmpty) {
-      responseGUI = getGui(guiName: tempRecordType);
-    } else {
-      setGui(guiName: tempRecordType, gui: responseGUI);
-    }
-    responseMap['GUI'] = responseGUI;
-    BsnTab newTab = UiGenerator().buildFrame(
-        actionContent: responseMap, recordType: responseGUI[recordType]);
-    tabSubject.add({'tab': newTab, 'action': 'add'});
+    tabSubject.add({'tab': bsnAction, 'action': 'add'});
   }
 
   getController({required String fieldName}) {}
@@ -133,6 +125,7 @@ class BsnTab extends BsnWidget {
     return null;
   }
 
+  @override
   T? getAttributeDefaultValue<T>(String attribute) {
     switch (attribute) {
       case bsn_fields.isDialog:

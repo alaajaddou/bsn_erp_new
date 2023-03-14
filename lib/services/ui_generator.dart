@@ -29,6 +29,7 @@ import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_tel.dar
 import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_text.dart';
 import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_textarea.dart';
 import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_url.dart';
+import 'package:bisan_systems_erp/widgets/bsn_table.dart';
 import 'package:bisan_systems_erp/widgets/bsn_toolbar.dart';
 import 'package:flutter/material.dart';
 import 'package:reflectable/reflectable.dart';
@@ -333,8 +334,14 @@ class UiGenerator {
   Widget getWidget({frame, widgetDetails}) {
     Widget widget;
     switch (widgetDetails['type']) {
+      case 'container':
+        widget = BsnContainer()
+        break;
       case 'toolbar':
         widget = BsnToolbarWidget(frame: frame, actionDetails: widgetDetails);
+        break;
+      case 'table':
+        widget = BsnTableWidget(map: widgetDetails, name: frame.tableName, isListing: frame.isListing, frame: frame);
         break;
       default:
         widget = Center(

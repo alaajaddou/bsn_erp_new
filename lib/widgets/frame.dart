@@ -4,13 +4,14 @@ import 'package:bisan_systems_erp/services/api.dart';
 import 'package:bisan_systems_erp/services/frame.dart';
 import 'package:bisan_systems_erp/services/ui_generator.dart';
 import 'package:bisan_systems_erp/utils/configs.dart' as configs;
+import 'package:bisan_systems_erp/constants/constants.dart' as constants;
 import 'package:bisan_systems_erp/view_models/bsn_menu_item.dart';
 import 'package:bisan_systems_erp/view_models/bsn_tab.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class FrameWidget extends StatefulWidget {
-  final BsnMenuItem itemDetails;
+  final dynamic itemDetails;
 
   const FrameWidget({Key? key, required this.itemDetails}) : super(key: key);
 
@@ -25,7 +26,7 @@ class _FrameWidgetState extends State<FrameWidget> {
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
         initialData: const {},
-        future: getListingData(widget.itemDetails),
+        future: getData(),
         builder: (context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
@@ -33,7 +34,7 @@ class _FrameWidgetState extends State<FrameWidget> {
             BsnTab frameObject = FrameService().createFrameObject(recordData);
             Widget frame = Column(
               mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children:
                   _getChildren(frameObject, recordData['GUI']['children']),
             );
@@ -46,20 +47,14 @@ class _FrameWidgetState extends State<FrameWidget> {
         });
   }
 
-  Future<dynamic> getListingData(BsnMenuItem item) async {
-    // check if the GUI is stored, and store it if not exist.
-    dynamic actionContent = {};
-    listingName = _getListingName(item.link);
-    if (configs.guiMap[listingName] == null) {
-      Response<dynamic> response = await Api.listing(item.link);
-      configs.setGui(
-          guiName: json.decode(response.data)['GUI']['name'],
-          gui: json.decode(response.data)['GUI']);
-      actionContent = json.decode(response.data);
+  Future<dynamic> getData() async {
+    if (widget.itemDetails is BsnMenuItem) {
+      return getListingData();
     } else {
-      actionContent['GUI'] = configs.getGui(guiName: listingName);
+      return getRecordData();
+
     }
-    return actionContent;
+
   }
 
   String _getListingName(String link) {
@@ -76,5 +71,44 @@ class _FrameWidgetState extends State<FrameWidget> {
     }
 
     return widgets;
+  }
+
+  Future getListingData() async {
+    dynamic item = widget.itemDetails;
+    // check if the GUI is stored, and store it if not exist.
+    dynamic actionContent = {};
+    listingName = _getListingName(item.link);
+    if (configs.guiMap[listingName] == null) {
+      Response<dynamic> response = await Api.listing(item.link);
+      configs.setGui(
+          guiName: json.decode(response.data)['GUI']['name'],
+          gui: json.decode(response.data)['GUI']);
+      actionContent = json.decode(response.data);
+    } else {
+      actionContent['GUI'] = configs.getGui(guiName: listingName);
+    }
+    return actionContent;
+  }
+
+  Future getRecordData() async {
+    Response<dynamic> response = await Api.callAction(widget.itemDetails);
+    Map recordData = Map.from(json.decode(response.data));
+    print(recordData);
+    String tempRecordType = widget.itemDetails.entity.getField(fieldName: widget.itemDetails.recordType!);
+    var responseGUI = recordData['GUI'];
+    if (responseGUI is String && responseGUI.isEmpty) {
+      responseGUI = configs.getGui(guiName: tempRecordType);
+    } else {
+      configs.setGui(guiName: tempRecordType, gui: responseGUI);
+    }
+    recordData['GUI'] = responseGUI;
+    BsnTab frameObject = FrameService().createFrameObject(recordData);
+    Widget frame = Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:
+      _getChildren(frameObject, recordData['GUI']['children']),
+    );
+    return Expanded(child: frame);
   }
 }

@@ -36,7 +36,8 @@ class _BsnTabWidgetState extends State<BsnTabWidget>
     tabController = TabController(
         length: tabList.length, vsync: this, initialIndex: _selectedIndex);
     tabSubject.stream.listen((event) {
-      BsnMenuItem newTab = event['tab'];
+      dynamic newTab = event['tab'];
+
 
       if (event['action'] == 'add') {
         tabList.add(TabTitleWidget(label: newTab.label, tabIndex: tabList.length));
