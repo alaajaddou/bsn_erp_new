@@ -13,7 +13,6 @@ class BsnToolbarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('here');
     return AppBar(
       backgroundColor: BsnTheme.secondaryColor,
       elevation: 2,

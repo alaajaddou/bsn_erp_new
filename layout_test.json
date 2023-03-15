@@ -1,0 +1,1045 @@
+{
+	"GUI": {
+		"type": "frame",
+		"recordType": "CONTACT",
+		"children": [
+			{
+				"type": "container",
+				"children": [
+					{
+						"type": "toolbar",
+						"children": [
+							{
+								"type": "button",
+								"name": "stop",
+								"label": "Stop",
+								"visible": "(getValue(\u0027#114701145\u0027)\u003d\u003dtrue)\u0001#114701145",
+								"icon": "0"
+							},
+							{
+								"type": "button",
+								"name": "save",
+								"label": "Save",
+								"icon": "Â°"
+							},
+							{
+								"type": "button",
+								"name": "print",
+								"label": "Print",
+								"icon": "Ëœ"
+							},
+							{
+								"type": "button",
+								"name": "clone",
+								"label": "Clone Original",
+								"icon": "T"
+							},
+							{
+								"type": "button",
+								"name": "delete",
+								"label": "Delete",
+								"icon": "`"
+							},
+							{
+								"type": "button",
+								"name": "history",
+								"label": "History",
+								"icon": "n"
+							},
+							{
+								"type": "button",
+								"name": "sendEmail",
+								"label": "Email",
+								"icon": "Ã’"
+							},
+							{
+								"type": "button",
+								"name": "attach",
+								"label": "Attach File",
+								"icon": ";"
+							},
+							{
+								"type": "container",
+								"name": "others",
+								"label": "Others",
+								"icon": "Ë†",
+								"children": [
+									{
+										"type": "button",
+										"name": "customerStatement",
+										"label": "Statement of Account",
+										"icon": "Â·"
+									},
+									{
+										"type": "button",
+										"name": "contactItemPriceRpt",
+										"label": "Customer Item Prices"
+									},
+									{
+										"type": "button",
+										"name": "printCusItemPrice",
+										"label": "Print Price Agreement"
+									},
+									{
+										"type": "button",
+										"name": "printContactBalances",
+										"label": "Print Contact Balances"
+									},
+									{
+										"type": "button",
+										"name": "updateCusItemPrice",
+										"label": "Update Contact Prices"
+									}
+								]
+							}
+						]
+					},
+					{
+						"type": "tab",
+						"children": [
+							{
+								"type": "container",
+								"name": "general",
+								"label": "General",
+								"children": [
+									{
+										"type": "container",
+										"name": "topGeneral",
+										"label": "topGeneral",
+										"children": [
+											{
+												"type": "container",
+												"children": [
+													{
+														"type": "container",
+														"name": "codeLine",
+														"label": "Code",
+														"labelAlign": "before",
+														"children": [
+															{
+																"type": "text",
+																"name": "code",
+																"label": "Code",
+																"enabled": "true\u0001#1523321514\u0001#1593017772",
+																"size": 7,
+																"labelAlign": "none",
+																"pattern": "^[A-Z0-9]{7}$",
+																"pad": "left"
+															},
+															{
+																"type": "checkBox",
+																"name": "enabled",
+																"label": "Enabled"
+															},
+															{
+																"type": "checkBox",
+																"name": "used",
+																"label": "Used",
+																"enabled": "false"
+															},
+															{
+																"type": "checkBox",
+																"name": "headerFld",
+																"label": "Header"
+															},
+															{
+																"type": "checkBox",
+																"name": "isPerson",
+																"label": "Person",
+																"enabled": "(getValue(\u0027isEmployee\u0027)\u003d\u003dfalse)\u0001isEmployee"
+															}
+														],
+														"layout": "row"
+													},
+													{
+														"type": "container",
+														"name": "name",
+														"label": "Name",
+														"labelAlign": "before",
+														"children": [
+															{
+																"type": "text",
+																"name": "nameAR",
+																"label": "Name - Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
+																"size": 50,
+																"columns": 30,
+																"labelAlign": "none"
+															},
+															{
+																"type": "text",
+																"name": "nameEN",
+																"label": "Name - English",
+																"size": 50,
+																"columns": 30,
+																"labelAlign": "none"
+															}
+														]
+													},
+													{
+														"type": "text",
+														"name": "treeParent",
+														"label": "Belongs to",
+														"size": 7
+													},
+													{
+														"type": "text",
+														"name": "taxId",
+														"label": "Tax ID",
+														"size": 15
+													},
+													{
+														"type": "text",
+														"name": "cusTaxType",
+														"label": "Tax Type",
+														"size": 1,
+														"nameValue": "Israel"
+													},
+													{
+														"type": "number",
+														"name": "currentBalance",
+														"label": "Current Balance",
+														"enabled": "false",
+														"size": 15,
+														"fractions": 2
+													},
+													{
+														"type": "text",
+														"name": "type",
+														"label": "Contact Type",
+														"size": 3
+													},
+													{
+														"type": "text",
+														"name": "memberCard",
+														"label": "Membership",
+														"size": 10
+													},
+													{
+														"type": "text",
+														"name": "sector",
+														"label": "Sector",
+														"size": 6
+													},
+													{
+														"type": "checkBox",
+														"name": "printPrices",
+														"label": "Print Prices in Store Issue/Receipt"
+													},
+													{
+														"type": "checkBox",
+														"name": "printContactBalance",
+														"label": "Print Balance"
+													},
+													{
+														"type": "date",
+														"name": "birthDate",
+														"label": "Date of Birth",
+														"enabled": "!isNull(\u0027isPerson\u0027)\u0001isPerson",
+														"columns": 10
+													},
+													{
+														"type": "date",
+														"name": "registrationDate",
+														"label": "Registration Date",
+														"enabled": "(getValue(\u0027isPerson\u0027)\u003d\u003dfalse)\u0001isPerson",
+														"columns": 10
+													},
+													{
+														"type": "select",
+														"name": "language",
+														"label": "Language",
+														"options": [
+															"",
+															"Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
+															"English"
+														]
+													}
+												]
+											},
+											{
+												"type": "container",
+												"children": [
+													{
+														"type": "text",
+														"name": "branch",
+														"label": "Branch",
+														"size": 2,
+														"nameValue": "ramallah"
+													}
+												]
+											}
+										],
+										"layout": "row"
+									},
+									{
+										"type": "table",
+										"name": "bankAccounts",
+										"label": "Bank Accounts",
+										"columns": [
+											{
+												"type": "text",
+												"name": "currency",
+												"label": "Currency",
+												"size": 2
+											},
+											{
+												"type": "container",
+												"name": "currency.name",
+												"label": "Currency\u0001Name",
+												"labelAlign": "before",
+												"children": [
+													{
+														"type": "text",
+														"name": "nameAR",
+														"label": "Name - Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
+														"size": 30,
+														"labelAlign": "none"
+													},
+													{
+														"type": "text",
+														"name": "nameEN",
+														"label": "Name - English",
+														"size": 30,
+														"labelAlign": "none"
+													}
+												]
+											},
+											{
+												"type": "text",
+												"name": "bank",
+												"label": "Bank",
+												"size": 6
+											},
+											{
+												"type": "text",
+												"name": "IBAN",
+												"label": "IBAN/Account#",
+												"size": 36
+											},
+											{
+												"type": "text",
+												"name": "comment",
+												"label": "Comment",
+												"size": 100,
+												"columns": 25
+											},
+											{
+												"type": "checkBox",
+												"name": "inactive",
+												"label": "Inactive"
+											},
+											{
+												"type": "text",
+												"name": "bankAccounts",
+												"label": "Bank Accounts",
+												"visible": "false",
+												"size": 20
+											}
+										]
+									}
+								]
+							},
+							{
+								"type": "container",
+								"name": "tabAddress",
+								"label": "Address",
+								"children": [
+									{
+										"type": "table",
+										"name": "address",
+										"label": "Contact Info",
+										"columns": [
+											{
+												"type": "select",
+												"name": "addressType",
+												"label": "Address Type",
+												"enabled": "(getValue(\u0027#1523321514\u0027)\u003d\u003dtrue)\u0001#1523321514",
+												"labelAlign": "none",
+												"options": [
+													"Work Phone",
+													"Mobile",
+													"Home Phone",
+													"Fax",
+													"Email",
+													"Website",
+													"GPS Position",
+													"Street",
+													"P.O.Box",
+													"SKYPE",
+													"Other"
+												]
+											},
+											{
+												"type": "text",
+												"name": "value",
+												"label": "Value",
+												"visible": "inRes(\u0027S162105487\u0027,\u0027addressType\u0027)\u0001addressType",
+												"size": 500,
+												"columns": 30,
+												"labelAlign": "placeholder"
+											},
+											{
+												"type": "text",
+												"name": "note",
+												"label": "Note",
+												"visible": "(getValue(\u0027noteShown\u0027)\u003d\u003dtrue)\u0001noteShown",
+												"size": 500,
+												"columns": 100,
+												"labelAlign": "placeholder"
+											},
+											{
+												"type": "text",
+												"name": "address",
+												"label": "Address",
+												"visible": "false",
+												"size": 20
+											}
+										]
+									},
+									{
+										"type": "container",
+										"children": [
+											{
+												"type": "text",
+												"name": "country",
+												"label": "Country",
+												"enabled": "true\u0001#1593017772",
+												"size": 2
+											},
+											{
+												"type": "text",
+												"name": "area",
+												"label": "Area",
+												"size": 10
+											}
+										],
+										"layout": "row"
+									}
+								]
+							},
+							{
+								"type": "container",
+								"name": "customer",
+								"label": "Customer",
+								"children": [
+									{
+										"type": "container",
+										"children": [
+											{
+												"type": "checkBox",
+												"name": "isCustomer",
+												"label": "Customer"
+											},
+											{
+												"type": "container",
+												"name": "cusContact",
+												"label": "Customer Contact",
+												"labelAlign": "before",
+												"children": [
+													{
+														"type": "text",
+														"name": "cusContactAR",
+														"label": "Customer Contact - Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
+														"size": 50,
+														"columns": 30,
+														"labelAlign": "none"
+													},
+													{
+														"type": "text",
+														"name": "cusContactEN",
+														"label": "Customer Contact - English",
+														"size": 50,
+														"columns": 30,
+														"labelAlign": "none"
+													}
+												]
+											},
+											{
+												"type": "text",
+												"name": "cusPriceList",
+												"label": "Customer Price List",
+												"size": 3,
+												"nameValue": "Default Sales Price List"
+											},
+											{
+												"type": "text",
+												"name": "salesman",
+												"label": "Salesman",
+												"size": 3,
+												"nameValue": "Salesman"
+											},
+											{
+												"type": "text",
+												"name": "cusCurrency",
+												"label": "Currency",
+												"size": 2,
+												"nameValue": "New Sheqel"
+											},
+											{
+												"type": "text",
+												"name": "cusAccount",
+												"label": "Customer Account",
+												"size": 4,
+												"nameValue": "Accounts Receivable - Local"
+											},
+											{
+												"type": "number",
+												"name": "discountPercent",
+												"label": "Discount %",
+												"size": 15,
+												"fractions": 2,
+												"max": "100.00",
+												"min": ""
+											},
+											{
+												"type": "number",
+												"name": "maxCredit",
+												"label": "Max Credit",
+												"enabled": "!isNull(\u0027cusCurrency\u0027)\u0001cusCurrency",
+												"size": 15,
+												"fractions": 3,
+												"min": "0.00"
+											},
+											{
+												"type": "number",
+												"name": "chkMaxCredit",
+												"label": "Check Max. Credit",
+												"enabled": "!isNull(\u0027cusCurrency\u0027)\u0001cusCurrency",
+												"size": 15,
+												"fractions": 3,
+												"min": "0.00"
+											},
+											{
+												"type": "number",
+												"name": "personalCheck",
+												"label": "Personal Check",
+												"enabled": "!isNull(\u0027cusCurrency\u0027)\u0001cusCurrency",
+												"size": 15,
+												"fractions": 3,
+												"min": "0.00"
+											},
+											{
+												"type": "number",
+												"name": "creditDays",
+												"label": "Credit Days",
+												"size": 10,
+												"min": "0"
+											},
+											{
+												"type": "checkBox",
+												"name": "creditDaysFromEndOfMonth",
+												"label": "Credit Days From End Of Month"
+											},
+											{
+												"type": "checkBox",
+												"name": "payToDriver",
+												"label": "Pay The Driver"
+											},
+											{
+												"type": "select",
+												"name": "cusTaxFormat",
+												"label": "Customer Tax Format",
+												"columns": 15,
+												"options": [
+													"Add Tax",
+													"Include Tax"
+												]
+											},
+											{
+												"type": "date",
+												"name": "customerExpiry",
+												"label": "Customer Expiry",
+												"columns": 10
+											}
+										]
+									},
+									{
+										"type": "table",
+										"name": "cusItemPrice",
+										"label": "Contact Item Prices",
+										"enabled": "!isNull(\u0027isCustomer\u0027)\u0001isCustomer",
+										"columns": [
+											{
+												"type": "text",
+												"name": "item",
+												"label": "Item",
+												"size": 9
+											},
+											{
+												"type": "container",
+												"name": "item.name",
+												"label": "Item\u0001Name",
+												"labelAlign": "before",
+												"children": [
+													{
+														"type": "text",
+														"name": "nameAR",
+														"label": "Name - Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
+														"size": 70,
+														"columns": 50,
+														"labelAlign": "none"
+													},
+													{
+														"type": "text",
+														"name": "nameEN",
+														"label": "Name - English",
+														"size": 70,
+														"columns": 50,
+														"labelAlign": "none"
+													}
+												]
+											},
+											{
+												"type": "text",
+												"name": "unit",
+												"label": "Unit",
+												"enabled": "!isNull(\u0027item\u0027)\u0001item",
+												"size": 6
+											},
+											{
+												"type": "text",
+												"name": "currency",
+												"label": "Currency",
+												"enabled": "!isNull(\u0027item\u0027)\u0001item",
+												"size": 2
+											},
+											{
+												"type": "number",
+												"name": "price",
+												"label": "Price",
+												"enabled": "!isNull(\u0027item\u0027)\u0001item",
+												"size": 13,
+												"columns": 8,
+												"fractions": 3,
+												"min": ""
+											},
+											{
+												"type": "number",
+												"name": "discountPercent",
+												"label": "Discount %",
+												"enabled": "!isNull(\u0027item\u0027)\u0001item",
+												"size": 5,
+												"fractions": 2,
+												"max": "100.00",
+												"min": ""
+											},
+											{
+												"type": "date",
+												"name": "expiryDate",
+												"label": "Expiry Date",
+												"enabled": "!isNull(\u0027item\u0027)\u0001item",
+												"columns": 10
+											},
+											{
+												"type": "text",
+												"name": "cusItemPrice",
+												"label": "Contact Item Prices",
+												"visible": "false",
+												"size": 20
+											}
+										]
+									}
+								]
+							},
+							{
+								"type": "container",
+								"name": "supplier",
+								"label": "Supplier",
+								"children": [
+									{
+										"type": "container",
+										"children": [
+											{
+												"type": "checkBox",
+												"name": "isSupplier",
+												"label": "Supplier"
+											},
+											{
+												"type": "container",
+												"name": "supContact",
+												"label": "Supplier Contact",
+												"labelAlign": "before",
+												"children": [
+													{
+														"type": "text",
+														"name": "supContactAR",
+														"label": "Supplier Contact - Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
+														"size": 50,
+														"columns": 30,
+														"labelAlign": "none"
+													},
+													{
+														"type": "text",
+														"name": "supContactEN",
+														"label": "Supplier Contact - English",
+														"size": 50,
+														"columns": 30,
+														"labelAlign": "none"
+													}
+												]
+											},
+											{
+												"type": "text",
+												"name": "supPriceList",
+												"label": "Supplier Price List",
+												"size": 3
+											},
+											{
+												"type": "text",
+												"name": "supCurrency",
+												"label": "Supplier Currency",
+												"size": 2,
+												"nameValue": "New Sheqel"
+											},
+											{
+												"type": "text",
+												"name": "supAccount",
+												"label": "Supplier Account",
+												"size": 4
+											},
+											{
+												"type": "select",
+												"name": "supTaxFormat",
+												"label": "Supplier Tax Format",
+												"columns": 15,
+												"options": [
+													"Add Tax",
+													"Include Tax"
+												]
+											},
+											{
+												"type": "number",
+												"name": "acceptReturnBefore",
+												"label": "Accept Return Before (Months)",
+												"size": 10,
+												"min": ""
+											},
+											{
+												"type": "checkBox",
+												"name": "restrictPurchases",
+												"label": "Limit to supplier defined items"
+											}
+										]
+									},
+									{
+										"type": "table",
+										"name": "supplierItemPrice",
+										"label": "Supplier Item Price",
+										"columns": [
+											{
+												"type": "text",
+												"name": "item",
+												"label": "Item",
+												"size": 9
+											},
+											{
+												"type": "container",
+												"name": "item.name",
+												"label": "Item\u0001Name",
+												"labelAlign": "before",
+												"children": [
+													{
+														"type": "text",
+														"name": "nameAR",
+														"label": "Name - Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
+														"size": 70,
+														"columns": 50,
+														"labelAlign": "none"
+													},
+													{
+														"type": "text",
+														"name": "nameEN",
+														"label": "Name - English",
+														"size": 70,
+														"columns": 50,
+														"labelAlign": "none"
+													}
+												]
+											},
+											{
+												"type": "text",
+												"name": "unit",
+												"label": "Unit",
+												"enabled": "!isNull(\u0027item\u0027)\u0001item",
+												"size": 6
+											},
+											{
+												"type": "text",
+												"name": "currency",
+												"label": "Currency",
+												"enabled": "!isNull(\u0027item\u0027)\u0001item",
+												"size": 2
+											},
+											{
+												"type": "number",
+												"name": "price",
+												"label": "Price",
+												"enabled": "!isNull(\u0027item\u0027)\u0001item",
+												"size": 13,
+												"columns": 8,
+												"fractions": 3,
+												"min": ""
+											},
+											{
+												"type": "number",
+												"name": "discountPercent",
+												"label": "Discount %",
+												"enabled": "!isNull(\u0027item\u0027)\u0001item",
+												"size": 5,
+												"fractions": 2,
+												"max": "100.00",
+												"min": ""
+											},
+											{
+												"type": "date",
+												"name": "expiryDate",
+												"label": "Expiry Date",
+												"enabled": "!isNull(\u0027item\u0027)\u0001item",
+												"columns": 10
+											},
+											{
+												"type": "text",
+												"name": "supplierItemCode",
+												"label": "Supplier Item Code",
+												"enabled": "!isNull(\u0027item\u0027)\u0001item",
+												"size": 13,
+												"pattern": "^[^a-z\\s]{1,13}$"
+											},
+											{
+												"type": "text",
+												"name": "supplierItemPrice",
+												"label": "Supplier Item Price",
+												"visible": "false",
+												"size": 20
+											}
+										]
+									},
+									{
+										"type": "table",
+										"name": "deductionDetail",
+										"label": "Deduction Detail",
+										"columns": [
+											{
+												"type": "number",
+												"name": "deductionPer",
+												"label": "Deduction (%)",
+												"enabled": "(isNull(\u0027deductionUntil\u0027)||(bdate(\u0027deductionUntil\u0027)\u003e19700101))\u0001deductionUntil",
+												"size": 2,
+												"max": "50",
+												"min": ""
+											},
+											{
+												"type": "date",
+												"name": "deductionUntil",
+												"label": "Deduction Until",
+												"enabled": "(isNull(\u0027deductionUntil\u0027)||(bdate(\u0027deductionUntil\u0027)\u003e19700101))\u0001deductionUntil",
+												"columns": 10
+											},
+											{
+												"type": "text",
+												"name": "deductionDetail",
+												"label": "Deduction Detail",
+												"visible": "false",
+												"size": 20
+											}
+										]
+									}
+								]
+							},
+							{
+								"type": "container",
+								"name": "employee",
+								"label": "Employee",
+								"children": [
+									{
+										"type": "checkBox",
+										"name": "isEmployee",
+										"label": "Employee"
+									},
+									{
+										"type": "container",
+										"name": "jobTitle",
+										"label": "Job Title",
+										"labelAlign": "before",
+										"children": [
+											{
+												"type": "text",
+												"name": "jobTitleAR",
+												"label": "Job Title - Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
+												"size": 50,
+												"columns": 30,
+												"labelAlign": "none"
+											},
+											{
+												"type": "text",
+												"name": "jobTitleEN",
+												"label": "Job Title - English",
+												"size": 50,
+												"columns": 30,
+												"labelAlign": "none"
+											}
+										]
+									},
+									{
+										"type": "select",
+										"name": "gender",
+										"label": "Gender",
+										"options": [
+											"",
+											"Male",
+											"Female"
+										]
+									},
+									{
+										"type": "text",
+										"name": "idCard",
+										"label": "ID Number",
+										"size": 15
+									},
+									{
+										"type": "checkBox",
+										"name": "resident",
+										"label": "Resident"
+									},
+									{
+										"type": "select",
+										"name": "maritalStatus",
+										"label": "Marital Status",
+										"columns": 15,
+										"options": [
+											"",
+											"Single",
+											"Married",
+											"Married works",
+											"Divorced",
+											"Widowed"
+										]
+									},
+									{
+										"type": "text",
+										"name": "empAccount",
+										"label": "Employee Account",
+										"size": 4
+									},
+									{
+										"type": "text",
+										"name": "empCurrency",
+										"label": "Employee Currency",
+										"size": 2,
+										"nameValue": "New Sheqel"
+									},
+									{
+										"type": "number",
+										"name": "children",
+										"label": "Children",
+										"size": 2,
+										"min": ""
+									},
+									{
+										"type": "number",
+										"name": "students",
+										"label": "Students",
+										"size": 1,
+										"max": "9",
+										"min": ""
+									},
+									{
+										"type": "number",
+										"name": "dependants",
+										"label": "Dependents",
+										"size": 1,
+										"max": "9",
+										"min": ""
+									},
+									{
+										"type": "select",
+										"name": "education",
+										"label": "Education",
+										"columns": 15,
+										"options": [
+											"",
+											"Pre. High School",
+											"High School",
+											"Diploma",
+											"Higher Diploma",
+											"BS / BA",
+											"MS / MA",
+											"PHD"
+										]
+									}
+								]
+							},
+							{
+								"type": "textArea",
+								"name": "deliveryInst",
+								"label": "Delivery Instructions",
+								"size": 500,
+								"columns": 80
+							},
+							{
+								"type": "container",
+								"name": "notesTab",
+								"label": "Notes",
+								"children": [
+									{
+										"type": "container",
+										"name": "alert",
+										"label": "Alert",
+										"labelAlign": "before",
+										"children": [
+											{
+												"type": "text",
+												"name": "alertAR",
+												"label": "Alert - Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©",
+												"size": 50,
+												"labelAlign": "none"
+											},
+											{
+												"type": "text",
+												"name": "alertEN",
+												"label": "Alert - English",
+												"size": 50,
+												"labelAlign": "none"
+											}
+										]
+									},
+									{
+										"type": "textArea",
+										"name": "notes",
+										"label": "Notes",
+										"size": 500,
+										"columns": 70,
+										"rows": 15
+									}
+								]
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	"values": {
+		"code": "0000002",
+		"nameAR": "Israeli Customer",
+		"_FRAME_TITLE": "Contact : â€ª0000002â€¬ - Israeli Customer",
+		"lastChanged": "12/08/2021 07:30:09",
+		"nameEN": "Israeli Customer",
+		"cusTaxFormat": "Add Tax",
+		"cusAccount": "1300",
+		"_ENTITY_ID": "0000002",
+		"cusTaxType": "I",
+		"branch": "03",
+		"enabled": "Yes",
+		"empCurrency": "01",
+		"isCustomer": "Yes",
+		"treeLevel": "1",
+		"_FRAME_NAME": "contact:0000002",
+		"cusCurrency": "01",
+		"cusPriceList": "S",
+		"salesman": "001",
+		"supCurrency": "01",
+		"supTaxFormat": "Add Tax",
+		"resident": "Yes"
+	}
+}

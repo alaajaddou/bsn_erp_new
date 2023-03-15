@@ -31,6 +31,16 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: '',
       onGenerateRoute: RouteGenerator.generateRoute,
+      // home: const TestWidget(),
     );
+  }
+}
+
+class TestWidget extends StatelessWidget {
+  const TestWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }
