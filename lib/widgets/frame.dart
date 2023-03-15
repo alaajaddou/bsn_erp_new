@@ -4,7 +4,6 @@ import 'package:bisan_systems_erp/services/api.dart';
 import 'package:bisan_systems_erp/services/frame.dart';
 import 'package:bisan_systems_erp/services/ui_generator.dart';
 import 'package:bisan_systems_erp/utils/configs.dart' as configs;
-import 'package:bisan_systems_erp/constants/constants.dart' as constants;
 import 'package:bisan_systems_erp/view_models/bsn_menu_item.dart';
 import 'package:bisan_systems_erp/view_models/bsn_tab.dart';
 import 'package:dio/dio.dart';
@@ -35,10 +34,12 @@ class _FrameWidgetState extends State<FrameWidget> {
             Widget frame = Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:
-                  _getChildren(frameObject, recordData['GUI']['children']),
+              children: UiGenerator()
+                  .getChildren(frameObject, recordData['GUI']['children']),
             );
-            return Expanded(child: frame);
+            return SingleChildScrollView(
+              child: frame,
+            );
           } else {
             return const Center(
               child: CircularProgressIndicator(),
@@ -52,25 +53,12 @@ class _FrameWidgetState extends State<FrameWidget> {
       return getListingData();
     } else {
       return getRecordData();
-
     }
-
   }
 
   String _getListingName(String link) {
     List<String> guiLinkSplit = link.split('/');
     return "${guiLinkSplit[1]}_${guiLinkSplit[0]}";
-  }
-
-  List<Widget> _getChildren(frame, children) {
-    List<Widget> widgets = [];
-    for (dynamic child in children) {
-      Widget widget =
-          UiGenerator().buildWidget(widgetDetails: child, frame: frame);
-      widgets.add(widget);
-    }
-
-    return widgets;
   }
 
   Future getListingData() async {
@@ -92,9 +80,8 @@ class _FrameWidgetState extends State<FrameWidget> {
 
   Future getRecordData() async {
     Response<dynamic> response = await Api.callAction(widget.itemDetails);
-    Map recordData = Map.from(json.decode(response.data));
-    print(recordData);
-    String tempRecordType = widget.itemDetails.entity.getField(fieldName: widget.itemDetails.recordType!);
+    dynamic recordData = json.decode(response.data);
+    String tempRecordType = widget.itemDetails.recordType;
     var responseGUI = recordData['GUI'];
     if (responseGUI is String && responseGUI.isEmpty) {
       responseGUI = configs.getGui(guiName: tempRecordType);
@@ -102,13 +89,6 @@ class _FrameWidgetState extends State<FrameWidget> {
       configs.setGui(guiName: tempRecordType, gui: responseGUI);
     }
     recordData['GUI'] = responseGUI;
-    BsnTab frameObject = FrameService().createFrameObject(recordData);
-    Widget frame = Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children:
-      _getChildren(frameObject, recordData['GUI']['children']),
-    );
-    return Expanded(child: frame);
+    return recordData;
   }
 }

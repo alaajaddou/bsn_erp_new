@@ -29,7 +29,9 @@ import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_tel.dar
 import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_text.dart';
 import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_textarea.dart';
 import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_url.dart';
+import 'package:bisan_systems_erp/widgets/bsn_container.dart';
 import 'package:bisan_systems_erp/widgets/bsn_table.dart';
+import 'package:bisan_systems_erp/widgets/bsn_text_field.dart';
 import 'package:bisan_systems_erp/widgets/bsn_toolbar.dart';
 import 'package:flutter/material.dart';
 import 'package:reflectable/reflectable.dart';
@@ -96,10 +98,13 @@ class UiGenerator {
     BsnWidget instance =
         _prepareInstance(widgetDetails: widgetDetails, frame: frame);
     // instance.enableLogic();
-    Widget widget = getWidget(frame: frame, widgetDetails: widgetDetails);
+    Widget widget = getWidget(
+        frame: frame, widgetDetails: widgetDetails, instance: instance);
     if (isInput(widgetDetails)) {
-      String value =
-          instance.getRoot().getEntity().getField(widgetDetails['name']);
+      String value = instance
+          .getRoot()
+          .getEntity()
+          .getField(fieldName: widgetDetails['name']);
       (instance as BsnField).controller = TextEditingController(text: value);
       instance.value = value;
       frame.addControl(
@@ -331,17 +336,29 @@ class UiGenerator {
     }
   }
 
-  Widget getWidget({frame, widgetDetails}) {
+  Widget getWidget({frame, widgetDetails, instance}) {
     Widget widget;
     switch (widgetDetails['type']) {
       case 'container':
-        widget = BsnContainer()
+        widget = BsnContainerWidget(
+            widgetDetails: widgetDetails, frame: frame, instance: instance);
+        break;
+      case 'number':
+        widget = BsnTextField(
+            parent: frame,
+            instance: instance,
+            type: widgetDetails['type'],
+            map: widgetDetails);
         break;
       case 'toolbar':
         widget = BsnToolbarWidget(frame: frame, actionDetails: widgetDetails);
         break;
       case 'table':
-        widget = BsnTableWidget(map: widgetDetails, name: frame.tableName, isListing: frame.isListing, frame: frame);
+        widget = BsnTableWidget(
+            map: widgetDetails,
+            name: frame.tableName,
+            isListing: frame.isListing,
+            frame: frame);
         break;
       default:
         widget = Center(
@@ -350,5 +367,16 @@ class UiGenerator {
     }
 
     return widget;
+  }
+
+  List<Widget> getChildren(frame, children) {
+    List<Widget> widgets = [];
+    for (dynamic child in children) {
+      Widget widget =
+          UiGenerator().buildWidget(widgetDetails: child, frame: frame);
+      widgets.add(widget);
+    }
+
+    return widgets;
   }
 }

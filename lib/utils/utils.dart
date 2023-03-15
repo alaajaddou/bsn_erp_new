@@ -98,9 +98,7 @@ class Utils {
   /// @param {String} size number of characters.
   /// @param {String} font The css font descriptor that text is to be rendered with (e.g. "11pt Roboto").
   ///
-  static getTextWidth(
-      {size,
-      TextDirection direction = TextDirection.ltr}) {
+  static getTextWidth({size, TextDirection direction = TextDirection.ltr}) {
     if (size != null) {
       String text = List.filled(10, 0).join("");
       TextSpan span = TextSpan(text: text);

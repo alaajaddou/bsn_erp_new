@@ -108,8 +108,6 @@ class Api {
       queryParams.putIfAbsent('withGUI', () => withGUI.toString());
     }
 
-    print(action.entity.getUnFlushedData());
-
     String url = "${Api.apiUrl}/action/$actionType/$actionName";
     try {
       Dio dio = Dio(_getBaseOptions());
