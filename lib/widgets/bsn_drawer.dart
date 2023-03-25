@@ -12,7 +12,7 @@ class _BsnDrawerState extends State<BsnDrawer> {
   @override
   Widget build(BuildContext context) {
     return const Drawer(
-      child: SafeArea(child: MainMenu()),
+      child: MainMenu(),
     );
   }
 }

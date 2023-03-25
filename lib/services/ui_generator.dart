@@ -29,9 +29,23 @@ import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_tel.dar
 import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_text.dart';
 import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_textarea.dart';
 import 'package:bisan_systems_erp/view_models/widgetInstances/fields/bsn_url.dart';
+import 'package:bisan_systems_erp/widgets/bsn_button.dart';
+import 'package:bisan_systems_erp/widgets/bsn_chart.dart';
+import 'package:bisan_systems_erp/widgets/bsn_checkbox.dart';
 import 'package:bisan_systems_erp/widgets/bsn_container.dart';
+import 'package:bisan_systems_erp/widgets/bsn_drop_down_button.dart';
+import 'package:bisan_systems_erp/widgets/bsn_html_editor.dart';
+import 'package:bisan_systems_erp/widgets/bsn_html_viewer.dart';
+import 'package:bisan_systems_erp/widgets/bsn_image_panel.dart';
+import 'package:bisan_systems_erp/widgets/bsn_inner_tab.dart';
+import 'package:bisan_systems_erp/widgets/bsn_radio.dart';
+import 'package:bisan_systems_erp/widgets/bsn_range_slider.dart';
+import 'package:bisan_systems_erp/widgets/bsn_split_pane.dart';
 import 'package:bisan_systems_erp/widgets/bsn_table.dart';
+import 'package:bisan_systems_erp/widgets/bsn_tags.dart';
+import 'package:bisan_systems_erp/widgets/bsn_text_field.dart';
 import 'package:bisan_systems_erp/widgets/bsn_toolbar.dart';
+import 'package:bisan_systems_erp/widgets/bsn_url_field.dart';
 import 'package:flutter/material.dart';
 import 'package:reflectable/reflectable.dart';
 
@@ -93,12 +107,10 @@ class UiGenerator {
     return widgets;
   }
 
-  buildWidget({required dynamic widgetDetails, required BsnTab frame}) {
+  Widget buildWidget({required dynamic widgetDetails, required BsnTab frame}) {
     BsnWidget instance =
         _prepareInstance(widgetDetails: widgetDetails, frame: frame);
     // instance.enableLogic();
-    Widget widget = getWidget(
-        frame: frame, widgetDetails: widgetDetails, instance: instance);
     if (isInput(widgetDetails)) {
       String value = instance
           .getRoot()
@@ -109,7 +121,9 @@ class UiGenerator {
       frame.addControl(
           name: widgetDetails['name'], controller: instance.controller);
     }
-    print('widget is $widget');
+    Widget widget = getWidget(
+        frame: frame, widgetDetails: widgetDetails, instance: instance);
+
     return widget;
   }
 
@@ -173,17 +187,16 @@ class UiGenerator {
   }
 
   BsnWidget _getInstance({required dynamic widgetDetails}) {
-    print('================== $widgetDetails ===================');
     if (widgetDetails['type'] == null) {
       return BsnWidget();
     }
     String type = widgetDetails['type'];
     switch (type) {
+      case "tab":
       case 'container':
         return BsnContainer();
       case "table":
         return BsnTable();
-      // case "tab":
       //   return BsnTab();
       case "split-pane":
         return BsnSplitPane();
@@ -201,12 +214,12 @@ class UiGenerator {
         return BsnDate();
       case 'text':
         return BsnText();
+      case 'textArea':
+        return BsnTextArea();
       case 'email':
         return BsnEmail();
       case 'number':
         return BsnNumeric();
-      case 'textArea':
-        return BsnTextArea();
       case "telephone":
         return BsnTel();
       case "select":
@@ -349,6 +362,11 @@ class UiGenerator {
         widget = BsnContainerWidget(
             widgetDetails: widgetDetails, frame: frame, instance: instance);
         break;
+      case 'tab':
+        widget = BsnInnerTabWidget(
+            widgetDetails: widgetDetails, frame: frame, instance: instance);
+
+        break;
       case 'table':
         if (frame.isListing) {
           widget = BsnTableWidget(
@@ -359,6 +377,97 @@ class UiGenerator {
         } else {
           widget = Container();
         }
+        break;
+      case "split-pane":
+        widget = BsnSplitWidget(
+          parent: frame,
+          instance: instance as BsnSplitPane,
+        );
+        break;
+      case "chart":
+        widget = BsnChartWidget(
+          parent: frame,
+          instance: instance as BsnChart,
+        );
+        break;
+      case "html-viewer":
+        widget = BsnHtmlViewerWidget(
+          parent: frame,
+          instance: instance as BsnHtmlViewer,
+        );
+        break;
+      case "htmlEditor":
+        widget = BsnHtmlEditorWidget(
+          parent: frame,
+          instance: instance as BsnHtmlEditor,
+        );
+        break;
+      case "image-panel":
+        widget = BsnImagePaneWidget(
+          parent: frame,
+          instance: instance as BsnImagePane,
+        );
+        break;
+      case 'button':
+        widget = BsnButtonWidget(
+            parent: frame, map: widgetDetails, instance: instance as BsnButton);
+        break;
+      case 'date':
+      case 'text':
+      case 'email':
+      case 'number':
+      case 'textArea':
+      case "telephone":
+        widget = BsnTextField(
+            parent: frame,
+            type: widgetDetails['type'],
+            map: widgetDetails,
+            instance: instance as BsnText);
+        break;
+      case "select":
+        widget = BsnDropdownWidget(
+          parent: frame,
+          map: widgetDetails,
+          instance: instance as BsnDropDown,
+        );
+        break;
+      case "checkBox":
+        widget = BsnCheckboxWidget(
+          parent: frame,
+          map: widgetDetails,
+          instance: instance as BsnCheckBox,
+        );
+        break;
+      case "radio":
+        widget = BsnRadioWidget(
+            parent: frame, map: widgetDetails, instance: instance as BsnRadio);
+        break;
+      case "image":
+        widget =
+            const Image(image: NetworkImage('https://via.placeholder.com/150'));
+        break;
+      // case "color":
+      // it need third party package.
+      // case "file":
+      // it need third party.
+      case "range":
+        widget = BsnRangeSlider(
+          parent: frame,
+          map: widgetDetails,
+          instance: instance as BsnRange,
+        );
+        break;
+      case "tags":
+        // it may need third party.
+        widget = BsnTagsWidget(
+            parent: frame, map: widgetDetails, instance: instance as BsnTags);
+        break;
+      case "url":
+        widget = BsnUrlField(
+          parent: frame,
+          map: widgetDetails,
+          instance: instance as BsnUrl,
+        );
         break;
       default:
         widget = Center(

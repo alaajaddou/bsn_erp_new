@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class TabTitleWidget extends StatefulWidget {
   final String label;
   final num tabIndex;
-  const TabTitleWidget({Key? key, required this.label, required this.tabIndex}) : super(key: key);
+  const TabTitleWidget({Key? key, required this.label, required this.tabIndex})
+      : super(key: key);
 
   @override
   State<TabTitleWidget> createState() => _TabTitleWidgetState();
@@ -20,10 +21,11 @@ class _TabTitleWidgetState extends State<TabTitleWidget> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            Text(widget.label),
+            Expanded(flex: 1, child: Text(widget.label)),
             GestureDetector(
               child: const Icon(Icons.close),
-              onTap: () => tabSubject.add({'tab': widget.tabIndex, 'action': 'remove'}),
+              onTap: () =>
+                  tabSubject.add({'tab': widget.tabIndex, 'action': 'remove'}),
             )
           ]),
     );

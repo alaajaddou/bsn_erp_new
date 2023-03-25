@@ -41,7 +41,8 @@ class _MainMenuState extends State<MainMenu> {
                             image: NetworkImage(
                                 'https://t3.ftcdn.net/jpg/03/22/68/66/360_F_322686690_FGS4GEosanesib73238v3vvYmU04SLpX.jpg'))),
                     currentAccountPicture: CircleAvatar(
-                      backgroundImage: NetworkImage('https://picsum.photos/200'),
+                      backgroundImage:
+                          NetworkImage('https://picsum.photos/200'),
                     ))),
             Expanded(child: _getMenu())
           ],
@@ -63,7 +64,7 @@ class _MainMenuState extends State<MainMenu> {
   Future<List<dynamic>> _fetchListItems() async {
     if (configs.guiMap.isEmpty || configs.guiMap["mainMenu"].isEmpty) {
       Response<dynamic> response = await Api.mainMenu();
-      configs.guiMap["mainMenu"] = json.decode(response.data)['GUI'];
+      configs.guiMap["mainMenu"] = response.data['GUI'];
       _menuItemList = configs.guiMap["mainMenu"];
       return configs.guiMap["mainMenu"];
     }

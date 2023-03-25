@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:bisan_systems_erp/services/api.dart';
 import 'package:bisan_systems_erp/services/frame.dart';
 import 'package:bisan_systems_erp/services/ui_generator.dart';
@@ -37,7 +35,11 @@ class _FrameWidgetState extends State<FrameWidget> {
               children: UiGenerator()
                   .getChildren(frameObject, recordData['GUI']['children']),
             );
-            return Expanded(child: frame);
+            return SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: frame,
+            );
           } else {
             return const Center(
               child: CircularProgressIndicator(),
@@ -67,9 +69,8 @@ class _FrameWidgetState extends State<FrameWidget> {
     if (configs.guiMap[listingName] == null) {
       Response<dynamic> response = await Api.listing(item.link);
       configs.setGui(
-          guiName: json.decode(response.data)['GUI']['name'],
-          gui: json.decode(response.data)['GUI']);
-      actionContent = json.decode(response.data);
+          guiName: response.data['GUI']['name'], gui: response.data['GUI']);
+      actionContent = response.data;
     } else {
       actionContent['GUI'] = configs.getGui(guiName: listingName);
     }
@@ -78,7 +79,7 @@ class _FrameWidgetState extends State<FrameWidget> {
 
   Future getRecordData() async {
     Response<dynamic> response = await Api.callAction(widget.itemDetails);
-    dynamic recordData = json.decode(response.data);
+    dynamic recordData = response.data;
     String tempRecordType = widget.itemDetails.recordType;
     var responseGUI = recordData['GUI'];
     if (responseGUI is String && responseGUI.isEmpty) {

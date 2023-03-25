@@ -42,25 +42,40 @@ class RouteGenerator {
     }
 
     return MaterialPageRoute(builder: (_) {
+      const TextDirection direction = TextDirection.rtl;
       final bool displayMobileLayout = MediaQuery.of(_).size.width < 600;
       return Scaffold(
           appBar: const BsnAppBar(),
-          drawer: displayMobileLayout ? const BsnDrawer() : null,
-          body: displayMobileLayout
-              ? type
-              : Row(
-                  children: const <Widget>[
-                    Expanded(
-                      flex: 1,
-                      child: MainMenu(),
+          drawer: direction != TextDirection.rtl
+              ? displayMobileLayout
+                  ? const BsnDrawer()
+                  : null
+              : null,
+          endDrawer: direction == TextDirection.rtl
+              ? displayMobileLayout
+                  ? const BsnDrawer()
+                  : null
+              : null,
+          body: SafeArea(
+            child: Directionality(
+              child: displayMobileLayout
+                  ? type
+                  : Row(
+                      children: const <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: MainMenu(),
+                        ),
+                        VerticalDivider(width: 1),
+                        Expanded(
+                          flex: 4,
+                          child: BsnTabWidget(),
+                        ),
+                      ],
                     ),
-                    VerticalDivider(width: 1),
-                    Expanded(
-                      flex: 4,
-                      child: BsnTabWidget(),
-                    ),
-                  ],
-                ),
+              textDirection: direction,
+            ),
+          ),
           bottomNavigationBar: BsnStatusBar());
     });
   }

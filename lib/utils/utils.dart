@@ -98,9 +98,7 @@ class Utils {
   /// @param {String} size number of characters.
   /// @param {String} font The css font descriptor that text is to be rendered with (e.g. "11pt Roboto").
   ///
-  static getTextWidth(
-      {size,
-      TextDirection direction = TextDirection.ltr}) {
+  static getTextWidth({size, TextDirection direction = TextDirection.ltr}) {
     if (size != null) {
       String text = List.filled(10, 0).join("");
       TextSpan span = TextSpan(text: text);
@@ -131,22 +129,28 @@ class Utils {
 
     if (labelWidget != null) {
       if (instance.hasLabelBefore()) {
-        children.add(labelWidget);
-        children.add(Expanded(flex: widgetFlex, child: fieldWidget));
+        children.add(Flexible(flex: labelFlex, child: labelWidget));
+        children.add(Flexible(flex: widgetFlex, child: fieldWidget));
       } else if (instance.hasLabelAfter()) {
-        children.add(Expanded(flex: widgetFlex, child: fieldWidget));
-        children.add(Expanded(flex: labelFlex, child: labelWidget));
+        children.add(Flexible(flex: widgetFlex, child: fieldWidget));
+        children.add(Flexible(flex: labelFlex, child: labelWidget));
       }
     }
     if (instance.runtimeType.toString().contains('nameValue') &&
         instance.hasNameValue() &&
         nameValueWidget != null) {
-      children.add(Expanded(flex: 1, child: nameValueWidget));
+      children.add(Flexible(flex: labelFlex, child: nameValueWidget));
     }
 
     Widget widget;
     if (children.isNotEmpty) {
+      // widget = GridView.count(
+      //   shrinkWrap: true,
+      //   crossAxisCount: children.length,
+      //   children: children,
+      // );
       widget = Row(
+        mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: children,
@@ -154,6 +158,7 @@ class Utils {
     } else {
       widget = fieldWidget;
     }
+    // return Container();
     return widget;
   }
 }

@@ -20,6 +20,7 @@ dependencies:
   rxdart: ^0.27.7
   reflectable: ^4.0.4
   advanced_datatable: ^0.0.8
+  scrollable_list_tabview: ^0.2.0-nullsafety
 
 
 dev_dependencies:

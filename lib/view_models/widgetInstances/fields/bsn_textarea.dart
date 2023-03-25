@@ -8,14 +8,6 @@ class BsnTextArea extends BsnText {
     fields = [...fields, bsn_fields.rows];
   }
 
-  num? _rows;
-
-  num? get rows => _rows ?? getAttributeDefaultValue(bsn_fields.rows);
-
-  set rows(num? rows) {
-    _rows = rows;
-  }
-
   @override
   T? getAttributeDefaultValue<T>(String attribute) {
     switch (attribute) {

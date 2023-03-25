@@ -14,7 +14,8 @@ class BsnText extends BsnField {
       bsn_fields.link,
       bsn_fields.pad,
       bsn_fields.nameValue,
-      bsn_fields.autoComplete
+      bsn_fields.autoComplete,
+      bsn_fields.rows
     ];
 
     updateEnable();
@@ -80,6 +81,14 @@ class BsnText extends BsnField {
     _link = link;
   }
 
+  int? _rows;
+
+  int? get rows => _rows ?? getAttributeDefaultValue(bsn_fields.rows);
+
+  set rows(int? rows) {
+    _rows = rows;
+  }
+
   @override
   T? getAttributeDefaultValue<T>(String attribute) {
     switch (attribute) {
@@ -89,6 +98,8 @@ class BsnText extends BsnField {
         return size as T;
       case bsn_fields.autoComplete:
         return false as T;
+      case bsn_fields.rows:
+        return 5 as T;
       default:
         return super.getAttributeDefaultValue(attribute);
     }

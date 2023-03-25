@@ -1,5 +1,3 @@
-import 'package:bisan_systems_erp/services/frame.dart';
-import 'package:bisan_systems_erp/view_models/bsn_menu_item.dart';
 import 'package:bisan_systems_erp/view_models/bsn_tab.dart';
 import 'package:bisan_systems_erp/widgets/frame.dart';
 import 'package:bisan_systems_erp/widgets/tab_title.dart';
@@ -38,10 +36,12 @@ class _BsnTabWidgetState extends State<BsnTabWidget>
     tabSubject.stream.listen((event) {
       dynamic newTab = event['tab'];
 
-
       if (event['action'] == 'add') {
-        tabList.add(TabTitleWidget(label: newTab.label, tabIndex: tabList.length));
-        tabViewList.add(FrameWidget(itemDetails: newTab));
+        tabList
+            .add(TabTitleWidget(label: newTab.label, tabIndex: tabList.length));
+        tabViewList.add(AutomaticKeepAlive(
+          child: FrameWidget(itemDetails: newTab),
+        ));
         // FrameService().createFrame(newTab);
         // openedTabs.add(selectedTab);
         // tabList.add(event['tab'].titleWidget);
@@ -95,6 +95,7 @@ class _BsnTabWidgetState extends State<BsnTabWidget>
             unselectedLabelColor: Colors.grey,
             isScrollable: true,
             onTap: (index) => _selectedIndex = index,
+            automaticIndicatorColorAdjustment: true,
             tabs: _getTabList(),
           ),
           body: TabBarView(

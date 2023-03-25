@@ -8,6 +8,14 @@ class BsnDate extends BsnText {
     fields = [...fields, bsn_fields.dateType];
   }
 
+  String? _dateType;
+
+  String? get dateType => _dateType;
+
+  set dateType(String? value) {
+    _dateType = value;
+  }
+
   @override
   T? getAttributeDefaultValue<T>(String attribute) {
     switch (attribute) {

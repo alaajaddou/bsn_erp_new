@@ -1,10 +1,8 @@
 import 'package:bisan_systems_erp/utils/utils.dart';
 import 'package:bisan_systems_erp/view_models/bsn_tab.dart';
 import 'package:bisan_systems_erp/view_models/bsn_widget.dart';
-import 'package:bisan_systems_erp/utils/configs.dart' as configs;
 
 import '../services/api.dart';
-import 'bsn_action.dart';
 
 // TODO: remove this after upgrade
 Map booleans = {"Yes": true, "No": false};
@@ -85,6 +83,7 @@ class Entity {
       }
     });
 
+    print(_unFlushedData);
     if (_unFlushedData.isNotEmpty) sendUnFlushedData();
   }
 

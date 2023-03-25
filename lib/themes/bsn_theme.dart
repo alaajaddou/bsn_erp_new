@@ -16,7 +16,16 @@ class BsnTheme {
     return Colors.white;
   }
 
-  static theme() {
+  static ThemeData theme({id = 0}) {
+    switch (id) {
+      case 1:
+        primaryColor = Colors.blue;
+        secondaryColor = Colors.lightBlueAccent;
+        break;
+      default:
+        primaryColor = Colors.red;
+        secondaryColor = Colors.white;
+    }
     return ThemeData(
         backgroundColor: primaryColor,
         indicatorColor: primaryColor,

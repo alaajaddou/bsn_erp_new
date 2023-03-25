@@ -1,10 +1,4 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
-import 'package:bisan_systems_erp/constants/constants.dart';
 import 'package:bisan_systems_erp/constants/fields.dart' as bsn_fields;
-import 'package:bisan_systems_erp/services/api.dart';
-import 'package:bisan_systems_erp/services/ui_generator.dart';
 import 'package:bisan_systems_erp/utils/configs.dart';
 import 'package:bisan_systems_erp/view_models/bsn_action.dart';
 import 'package:bisan_systems_erp/view_models/bsn_widget.dart';
@@ -75,18 +69,22 @@ class BsnTab extends BsnWidget {
   }
 
   void initializeTitleWidget(tab) {
-    titleWidget = Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(entity.getField(fieldName: 'title')),
-              GestureDetector(
-                child: const Icon(Icons.close),
-                onTap: () => tabSubject.add({'tab': tab, 'action': 'remove'}),
-              )
-            ]));
+    print(
+        '====================================== here ============================================');
+    titleWidget = Container(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      width: 200,
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(entity.getField(fieldName: 'title')),
+            GestureDetector(
+              child: const Icon(Icons.close),
+              onTap: () => tabSubject.add({'tab': tab, 'action': 'remove'}),
+            )
+          ]),
+    );
   }
 
   Icon? getIcon(String? icon) {
@@ -104,15 +102,9 @@ class BsnTab extends BsnWidget {
       required String name,
       String? tempCode,
       required String action}) async {
-    BsnAction bsnAction = BsnAction(
-      tableName,
-      name,
-      action,
-      code,
-      getTempCode(),
-      entity,
-        title
-    );
+    BsnAction bsnAction =
+        BsnAction(tableName, name, action, code, getTempCode(), entity, title);
+    print(bsnAction.toString());
     tabSubject.add({'tab': bsnAction, 'action': 'add'});
   }
 

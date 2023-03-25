@@ -1,8 +1,6 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:bisan_systems_erp/services/api.dart';
 import 'package:bisan_systems_erp/themes/bsn_theme.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -149,7 +147,8 @@ class _LoginPageState extends State<LoginPage> {
     String username = userController.text;
     String password = passwordController.text;
     Response<dynamic> response = await Api.login(username, password);
-    Api.token = (json.decode(response.data))['token'];
+    print(response.data['token']);
+    Api.token = response.data['token'];
     // we need to navigate to the home page || the dashboard.
     Navigator.of(context).pushReplacementNamed('home');
   }
